@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>生成二维码</title>
+    <style>
+        .codeBorder{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -100px;
+            width: 200px;
+            height: 200px;
+            border: 1px solid rgb(38, 100, 176);
+        }
+        .codeBorder img, #code{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="codeBorder">
+        <div id="code"></div>
+        <img id="imgOne" src="">
+    </div>
+</body>
+<script src="jquery.js"></script>
+<script src="jquery.qrcode.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        // 直接生成二维码
+        $("#imgOne").hide();
+        $("#code").qrcode({
+            render: "table", //渲染方式，还有canvas方式
+            width: 200, //宽度
+            height: 200, //高度
+            text: "https://www.baidu.com/", //任意内容
+            // correctLevel: QRErrorCorrectLevel.H,//纠错等级  
+            background: "#fff",//背景颜色  
+            foreground: "#000" //前景颜色(二维码的颜色)
+        });
+
+        //生成二维码图片
+        // var qrcode = $('#code').qrcode("https://www.baidu.com/").hide();
+        // var canvas = qrcode.find('canvas').get(0);
+        // $('#imgOne').attr('src',canvas.toDataURL('image/jpg'));
+    })
+   
+</script>
+</html>

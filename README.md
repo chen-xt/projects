@@ -4,3 +4,4 @@
 - 2.count：js实现简单的计数器
 - 3.cardCertify：调用百度接口进行身份证识别
 - 4.qrcode：jquery.qrcode.js生成二维码
+- 5.jsonToExcel：前端json导出为excel

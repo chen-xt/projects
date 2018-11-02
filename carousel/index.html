@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>图片轮播</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+			text-decoration: none;
+		}
+		body{
+			padding: 20px;
+		}
+		#container{
+			width: 400px;
+			height: 320px;
+			border: 3px solid #333;
+			overflow: hidden;
+			position: relative;
+		}
+		#list{
+			width: 3200px;
+			height: 320px;
+			position: absolute;
+			z-index: 1;
+		}
+		#list img{
+			float: left;
+		}
+		#buttons{
+			position: absolute;
+			height: 10px;
+			width: 120px;
+			z-index: 2;
+			bottom: 20px;
+			left: 250px;
+		}
+		#buttons span{
+			cursor: pointer;
+			float: left;
+			border: 1px solid #fff;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: #333;
+			margin-right: 5px;
+		}
+		#buttons .on{
+			background: orangered;
+		}
+		.arrow{
+			cursor: pointer;
+			display: none;
+			line-height: 39px;
+			text-align: center;
+			font-size: 36px;
+			font-weight: bold; 
+			width: 40px;
+			height: 40px;
+			position: absolute;
+			z-index: 2;
+			top: 180px;
+
+		}
+		.arrow:hover{
+			background-color: RGBA(0,0,0,0.7);
+		}
+		#prev{
+			left: 20px;
+		}
+		#next{
+			right: 20px;
+		}
+		.arrow{
+			display: block;
+		}
+		#container:hover {
+			display: block;
+		}
+		
+	</style>
+	<script type="text/javascript">
+	  window.onload = function(){
+		var container=document.getElementById('container');
+		var list=document.getElementById('list');
+		var buttons=document.getElementById('buttons').getElementsByTagName('span');
+		var prev=document.getElementById('prev');
+		var next=document.getElementById('next');
+		var animated = false;
+		var timer;//设置定时器
+		//设置小圆点跟着图片的切换而滚动（亮起来）
+		var index=1;
+
+		function showButton(){
+			for(var i=0;i<buttons.length;i++){
+			  if(buttons[i].className=='on'){
+				buttons[i].className='';//这边不能用双等号，否则会出错
+				break;
+				}
+			   }
+			buttons[index-1].className='on';//数组从0开始，所以减1；让其class为‘on’，即亮起来
+			}
+
+			//箭头切换
+		function animate(offset){
+			var animated = true; //连续点击不会卡顿
+			var newLeft=parseInt(list.style.left)+offset;
+			var time=450; //位移总时间
+			var interval=10; //位移间隔时间
+			var speed=offset/(time/interval);//每次位移量
+
+			function go(){
+				if((speed<0 && parseInt(list.style.left)>newLeft)||(speed>0 && parseInt(list.style.left)<newLeft)){
+				   list.style.left=parseInt(list.style.left)+speed+'px';
+						setTimeout(go,interval);//递归
+						}
+				else{
+					var animated = false;
+					//实现无限滚动，即向左向右滚动无限次都不会出现空白
+					list.style.left=newLeft+'px';
+					if(newLeft>-400){
+						list.style.left=-2400+'px';
+				 	 }
+					if(newLeft<-2400){
+						list.style.left=-400+'px';
+					 }
+				}
+			}	
+		    	go();
+		}
+
+			function play(){
+				//设置定时器，每隔3秒会点一下右箭头
+				timer=setInterval(function(){
+					next.onclick();
+				},3000);
+			}
+			function stop(){
+				clearInterval(timer);//清除定时器
+			}
+
+			next.onclick=function(){
+				if(index==6){
+					index=1;
+				}else{
+					index+=1;//每次点击都要改变index的值，使小圆点对应到图片上
+				}
+				showButton();
+				if(!animated){
+					animate(-400);
+				}
+			}
+			prev.onclick=function(){
+				if(index==1){
+					index=6;
+				 }else{
+					index-=1;
+				}
+				showButton();
+				if(!animated){
+					animate(400);
+				}			
+			}
+			//按钮切换
+			for(var i=0;i<buttons.length;i++){
+				buttons[i].onclick=function(){
+				  if(this.className=='on'){
+				  	return;//优化：当前按钮已经被点击的情况下，不会再去执行下面的这些语句
+				  }
+				  //存放自身的index值
+				  var myIndex=parseInt(this.getAttribute('index'));
+				  var offset=-600*(myIndex-index);
+				  index=myIndex;
+				  showButton();
+				  if(!animated){
+				  	 animate(offset);
+				  } 
+				  
+				}
+			}
+			container.onmouseover=stop;//鼠标移上去停止
+			container.onmouseout=play;//鼠标移出播放
+			play();
+		}
+	</script>
+</head>
+<body>
+	<div id="container">
+		<div id="list" style="left:-400px">
+			<img src="imges/6.jpg"  alt="图片6">
+			<img src="imges/1.jpg"  alt="图片1">
+			<img src="imges/2.jpg"  alt="图片2">
+			<img src="imges/3.jpg"  alt="图片3">
+			<img src="imges/4.jpg"  alt="图片4">
+			<img src="imges/5.jpg"  alt="图片5">
+			<img src="imges/6.jpg"  alt="图片6">
+			<img src="imges/1.jpg"  alt="图片1">
+		</div>
+		<div id="buttons">
+			<span index="1" class="on"></span>
+			<span index="2"></span>
+			<span index="3"></span>
+			<span index="4"></span>
+			<span index="5"></span>
+			<span index="6"></span>
+		</div>
+		<a href="javascript:;" class="arrow" id="prev">&lt;</a>
+		<a href="javascript:;" class="arrow" id="next">&gt;</a>
+	</div>
+</body>
+</html>

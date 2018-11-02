@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas实现波浪</title>
+    <style>
+        html, 
+        body {
+            height: 100%;
+            text-align: center;
+        }
+        #canvas {
+            border: 5rpx solid #fff;
+            border-radius: 50%;
+            background-image: -moz-linear-gradient( 90deg, rgb(232,52,66) 0%, rgb(244,70,88) 68%, rgb(255,87,109) 100%);
+            background-image: -webkit-linear-gradient( 90deg, rgb(232,52,66) 0%, rgb(244,70,88) 68%, rgb(255,87,109) 100%);
+            background-image: -ms-linear-gradient( 90deg, rgb(232,52,66) 0%, rgb(244,70,88) 68%, rgb(255,87,109) 100%);
+            box-shadow: 0px 6px 18px 0px rgba(65, 65, 65, 0.16);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="200" height="200"></canvas>
+</body>
+
+<script src="jquery.js"></script>
+<script>
+   $(function() {
+        let canvas = $("canvas");
+        let ctx = canvas[0].getContext('2d');
+        let radians = (Math.PI / 180) * 180;
+        let startTime = Date.now();
+        let time = 2000;
+        let clockwise = 1;
+        let cp1x, cp1y, cp2x, cp2y;
+        
+        requestAnimationFrame(
+            function waveDraw() {  
+                let t = Math.min(1.0, (Date.now() - startTime) / time);
+                
+                if(clockwise) {
+                    cp1x = 90 + (55 * t);
+                    cp1y = 28 + (72 * t);
+                    cp2x = 92 - (51 * t);
+                    cp2y = 179 - (79 * t);
+                } else {
+                    cp1x = 145 - (55 * t);
+                    cp1y = 100 - (72 * t);
+                    cp2x = 41 + (51 * t);
+                    cp2y = 100 + (79 * t);
+                }
+                
+                ctx.clearRect(0, 0, 200, 200);  //在给定的矩形内清除指定的像素(x坐标,y坐标,宽,高)
+                ctx.beginPath(); //开始一条路径，或重置当前的路径
+                ctx.moveTo(0, 100); //把路径移动到画布中的指定点，不创建线条(x坐标,y坐标)
+                // 绘制三次贝塞尔曲线-(左下控制点的x、y坐标,右下控制点的x、y坐标,右上结束点的x、y坐标)，左上开始点坐标为moveto的x、y坐标
+                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, 200, 100); 
+                // 绘制圆弧(圆心x坐标,圆心y坐标,圆半径,起始角,结束角,顺时针/逆时针)
+                ctx.arc(100, 100, 100, 0, radians, 0);
+                ctx.fillStyle = "rgba(255, 255, 255, .3)"; //设置填充的颜色
+                ctx.fill(); //填充
+                ctx.save(); //保存当前环境的状态
+                
+                if( t == 1 ) {
+                    startTime = Date.now();
+                    clockwise = !clockwise;
+                } 
+
+            requestAnimationFrame(waveDraw);
+            // 这边需要注意的是，微信小程序中是没有requestAnimationFrame方法的，
+            // 所以为了实现循环需要自己写个定时器setInterval()，或者自定义一个requestAnimationFrame方法，
+            // 而且微信小程序中canvas的方法略有区别
+            }
+        );
+
+    })
+
+
+</script>
+</html>

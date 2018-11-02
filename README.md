@@ -6,3 +6,4 @@
 - 4.qrcode：jquery.qrcode.js生成二维码
 - 5.jsonToExcel：前端json导出为excel
 - 6.cart：用JS实现购物车特效
+- 7.carousel：html+css+js 图片轮播图

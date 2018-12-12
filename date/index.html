@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试时间</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+        当前时间(具体到秒) ：<div id="nowTime"></div>
+        当前年月日：<div id="nowDate"></div>
+        当前日的周一：<div id="MondayTime"></div>
+        当前日的周日：<div id="SundayTime"></div>
+        当前日所在月的最后一天：<div id="lastDay"></div>
+</body>
+<script>
+
+    // 时间格式转换
+    function getTime(strDate){
+        var date = new Date(strDate);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var str = y+"-"+m+"-"+d;
+        return str;
+    }
+
+    // 获取当前时间
+    var date = new Date();
+    var year = date.getFullYear(); //获取完整的年份(4位)
+    var month = date.getMonth()+1>10 ? date.getMonth()+1 : '0'+date.getMonth()+1; //获取月份
+    var day = date.getDate()+1>10 ? date.getDate() : '0'+date.getDate(); //获取日
+    var hours = date.getHours()+1>10 ? date.getHours() : '0'+date.getHours(); //获取小时
+    var minutes = date.getMinutes()+1>10 ? date.getMinutes() : '0'+date.getMinutes(); //获取分钟
+    var seconds = date.getSeconds()+1>10 ? date.getSeconds() : '0'+date.getSeconds(); //获取秒
+    var nowTime = year+'-'+month+'-'+day+' '+hours+':'+minutes+':'+seconds; //当前时间(具体到秒)
+    $("#nowTime").text(nowTime);
+    var nowDate = year+'-'+month+'-'+day; //当前年月日
+    $("#nowDate").text(nowDate);
+
+    // 获取当前日的周一和周日
+    var nowTime = date.getTime() ;
+    var nowDay = date.getDay();
+    var oneDayTime = 24*60*60*1000 ;
+    var MondayTime = nowTime - (nowDay-1)*oneDayTime ;//显示周一
+    var SundayTime =  nowTime + (7-nowDay)*oneDayTime ;//显示周日
+    $("#MondayTime").text(getTime(MondayTime));
+    $("#SundayTime").text(getTime(SundayTime));
+
+    // 获取当前日所在月的最后一天
+    var currentMonth = date.getMonth();
+    var nextMonth = ++ currentMonth;
+    var nextMonthFirstDay = new Date(date.getFullYear(),nextMonth,1);
+    var lastDay = new Date(nextMonthFirstDay-oneDayTime);
+    $("#lastDay").text(getTime(lastDay));
+    
+</script>
+</html>

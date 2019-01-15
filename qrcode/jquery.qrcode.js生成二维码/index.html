@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jquery.qrcode.js生成二维码</title>
+    <style>
+        .codeBorder{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -100px;
+            width: 200px;
+            height: 200px;
+            border: 1px solid rgb(38, 100, 176);
+        }
+        .codeBorder img, #code{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="codeBorder">
+        <div id="code"></div>
+        <!-- 存放二维码图片 -->
+        <!-- <img id="imgOne" src="">   -->
+    </div>
+</body>
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery.qrcode.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        // 简单方式
+        // $("#code").qrcode("hi,chen!");
+
+        // 直接生成二维码
+        $("#code").qrcode({
+            render: "canvas", //渲染方式
+            width: 200,  //宽度
+            height: 200, //高度
+            text: utf16to8("你好啊"), //内容
+            background: "#fff",  //背景色  
+            foreground: "#000",   //前景色(二维码的颜色)
+            correctLevel: 1,  //容错级别
+        });
+
+        //生成二维码图片
+        // var qrcode = $('#code').qrcode("123456").hide();
+        // var canvas = qrcode.find('canvas').get(0);
+        // $('#imgOne').attr('src',canvas.toDataURL('image/jpg'));
+
+    })
+
+    // 编码转换函数
+    function utf16to8(str) {  
+        var out, i, len, c;  
+        out = "";  
+        len = str.length;  
+        for(i = 0; i < len; i++) {  
+        c = str.charCodeAt(i);  
+        if ((c >= 0x0001) && (c <= 0x007F)) {  
+            out += str.charAt(i);  
+        } else if (c > 0x07FF) {  
+            out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));  
+            out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));  
+            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));  
+        } else {  
+            out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));  
+            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));  
+        }  
+        }  
+        return out;  
+    }
+   
+</script>
+</html>

@@ -8,5 +8,5 @@
 - 6.cart：用JS实现购物车特效
 - 7.carousel：html+css+js 图片轮播图
 - 8.date：js获取当前时间及其他需要的时间格式
-- 9.date：echarts实现水球图
+- 9.echarts-liquidfill：echarts实现水球图
 

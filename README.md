@@ -9,4 +9,4 @@
 - 7.carousel：html+css+js 图片轮播图
 - 8.date：js获取当前时间及其他需要的时间格式
 - 9.echarts-liquidfill：echarts实现水球图
-
+- 10.scanQrcode：二维码识别(中文内容二维码无法识别)

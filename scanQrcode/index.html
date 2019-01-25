@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>二维码识别</title>
+    <script src="jquery.min.js"></script>
+    <script src="qrcode.js"></script>
+</head>
+
+<body>
+    <input type="file" id="newfile">
+    <!-- <img id="imgSrc" src="" style="width:100px;height:100px;"> -->
+</body>
+
+<script>
+
+    // 通过文件的形式获取到本地的图片，生成一个图片的临时路径，然后解析这个二维码图片；
+    // qrcode.decode(img)方法能将二维码图片解析，通过qrcode.callback=function(img){}将解析的图片返回文本值；
+    var newfile = document.getElementById('newfile');
+    var getObjectURL = function (file) {
+        console.log(file);
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+          url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+        url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+          url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    newfile.onchange = function () {
+        //   console.log(newfile[0]);
+        console.log(getObjectURL(this.files[0]));// newfile[0]是通过input file上传的二维码图片文件，值“blob:null/790f848e-c18e-47e1-a2c9-72ded994bbe5”
+        // $("#imgSrc").attr("src",getObjectURL(this.files[0]));
+        qrcode.decode(getObjectURL(this.files[0]));
+        qrcode.callback = function (imgMsg) {
+            alert("二维码解析：" + imgMsg)
+        }
+    }
+</script>
+
+</html>
